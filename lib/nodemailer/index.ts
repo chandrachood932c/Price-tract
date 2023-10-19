@@ -99,9 +99,16 @@ export const sendEmail = async (emailContent: EmailContent, sendTo: string[]) =>
     subject: emailContent.subject,
   }
 
-  transporter.sendMail(mailOptions, (error: any, info: any) => {
-    if(error) return console.log(error);
+  // transporter.sendMail(mailOptions, (error: any, info: any) => {
+  //   if(error) return console.log(error);
     
-    console.log('Email sent: ', info);
-  })
+  //   console.log('Email sent: ', info);
+  // })
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Email sent');
+  } catch (error) {
+    console.error('Email sending failed:', error);
+    throw error; // You can choose to rethrow the error or handle it as needed.
+  }
 }

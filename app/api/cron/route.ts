@@ -77,6 +77,7 @@ export async function GET(request: Request) {
       data: updatedProducts,
     });
   } catch (error: any) {
+    console.error(`Failed to get all products: ${error.message}`);
     throw new Error(`Failed to get all products: ${error.message}`);
   }
 }
