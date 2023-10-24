@@ -6,8 +6,6 @@ export async function scrapeAmazonProduct(url:string){
 
     if(!url) return;
 
-    // curl --proxy brd.superproxy.io:22225 --proxy-user brd-customer-hl_e56c460f-zone-unblocker:x1ijb76c4177 -k https://lumtest.com/myip.json
-
     //Bright Data proxy configuration
     const username = String(process.env.BRIGHT_DATA_USERNAME);
     const password = String(process.env.BRIGHT_DATA_PASSWORD); 
@@ -16,7 +14,7 @@ export async function scrapeAmazonProduct(url:string){
     const options = {
         auth: {
             username: `${username}-session-${session_id}`,
-            password,
+            password
         },
         host: 'brd.superproxy.io',
         port,
@@ -59,7 +57,7 @@ export async function scrapeAmazonProduct(url:string){
         //construct data object
         const data = {
             url,
-            currency: currency || '$',
+            currency: '₹',
             image: imageUrls[0],
             title,
             currentPrice: Number(currentPrice) || Number(originalPrice),
@@ -78,7 +76,7 @@ export async function scrapeAmazonProduct(url:string){
         return data;
 
     } catch (error: any) {
-        throw new Error(`Failed to scrape product: $(error.message)`);
+        console.log(`Failed to scrape product: $(error.message)`);
     }
 
 }
