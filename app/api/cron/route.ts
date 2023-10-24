@@ -16,7 +16,7 @@ export async function GET(request: Request) {
 
     const products = await Product.find({});
 
-    if (!products) throw new Error("No product fetched");
+    if (!products || products.length === 0) throw new Error("No product fetched");
 
     //SCRAPE LATEST PRODUCT DETAILS & UPDATE DB
     const updatedProducts = await Promise.all(
@@ -24,7 +24,11 @@ export async function GET(request: Request) {
         // Scrape product
         const scrapedProduct = await scrapeAmazonProduct(currentProduct.url);
 
-        if (!scrapedProduct) return;
+        if (!scrapedProduct) {
+          // Handle the case where scrapedProduct is undefined
+          console.error(`Scraping failed for product with URL: ${currentProduct.url}`);
+          return currentProduct; // Return the current product without any changes
+        }
 
         const updatedPriceHistory = [
           ...currentProduct.priceHistory,
